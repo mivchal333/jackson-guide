@@ -1,4 +1,4 @@
-package jsonPropertyOrder;
+package jsonRawValue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,14 +7,15 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-class BeanWithPropertyOrderTest {
+class BeanWithoutRawValueTest {
 
     @Test
-    void shouldUseJsonPropertyOrder() throws JsonProcessingException {
-
-        BeanWithPropertyOrder bean = new BeanWithPropertyOrder("id1", "name1");
+    void shouldWrapValueAsString() throws JsonProcessingException {
+        BeanWithoutRawValue bean = new BeanWithoutRawValue("{\"ala\":{\"inside\": \"czekolara\"}}");
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(bean);
-        assertThat(json, equalTo("{\"name\":\"name1\",\"id\":\"id1\"}"));
+
+        // json: {"name":"{\"ala\":{\"inside\": \"czekolara\"}}"}
+        assertThat(json, equalTo("{\"name\":\"ala\\\"inside\\\"czekolara{}\"}"));
     }
 }
